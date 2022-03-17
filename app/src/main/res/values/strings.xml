@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HabbitsTracker</string>
+    <string-array name="priorities">
+        <item>High</item>
+        <item>Middle</item>
+        <item>Low</item>
+    </string-array>
+</resources>
