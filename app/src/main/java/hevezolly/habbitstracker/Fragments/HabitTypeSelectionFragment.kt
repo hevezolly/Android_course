@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import hevezolly.habbitstracker.Interfaces.IHabitReplacer
 import hevezolly.habbitstracker.R
 
-class HabitTypeSelectionFragment: Fragment(), IHabitReplacer {
+class HabitTypeSelectionFragment: NavHostFragment(), IHabitReplacer {
 
 
     override fun onCreateView(

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hevezolly.habbitstracker.App
@@ -17,7 +18,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class HabitsListFragment: Fragment() {
+class HabitsListFragment: NavHostFragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HabitsAdapter

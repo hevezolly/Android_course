@@ -36,15 +36,17 @@ IEditHabitReciver{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_layout)
-        setSupportActionBar(findViewById(R.id.toolbar))
-        val host = supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
-        val navController = host.navController
-        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout) as Openable
         val navView = findViewById<NavigationView>(R.id.nav_view)
-        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
-        //setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-
+        if (savedInstanceState == null) {
+            setSupportActionBar(findViewById(R.id.toolbar))
+            val host =
+                supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
+            val navController = host.navController
+            val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout) as Openable
+            appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+            //setupActionBarWithNavController(navController, appBarConfiguration)
+            navView.setupWithNavController(navController)
+        }
         navView.menu.findItem(R.id.nav_home).setOnMenuItemClickListener {
             setFragment(HabitsListFragment())
             true
