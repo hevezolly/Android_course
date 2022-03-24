@@ -19,14 +19,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import hevezolly.habbitstracker.Fragments.HabitTypeSelectionFragment
 import hevezolly.habbitstracker.Fragments.HabitsListFragment
-import hevezolly.habbitstracker.Interfaces.IBackReciver
-import hevezolly.habbitstracker.Interfaces.IHabitAddReciver
-import hevezolly.habbitstracker.Interfaces.IHabitReplaceReciver
+import hevezolly.habbitstracker.Interfaces.*
+import hevezolly.habbitstracker.Model.EditedHabit
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.Model.HabitService
 import kotlinx.android.synthetic.main.main_layout.*
 
-class MainActivity : AppCompatActivity(), IHabitAddReciver, IHabitReplaceReciver, IBackReciver {
+class MainActivity : AppCompatActivity(), IHabitAddReciver, IHabitReplaceReciver, IBackReciver,
+IEditHabitReciver{
 
     private val habitService: HabitService
         get() = (applicationContext as App).habitService
@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity(), IHabitAddReciver, IHabitReplaceReciver
 
     override fun replaceHabitAt(index: Int, newHabit: Habit) {
         habitService.replaceHabitAt(index, newHabit)
+        val fragment = HabitsListFragment()
+        setFragment(fragment)
     }
 
     companion object{
@@ -77,6 +79,12 @@ class MainActivity : AppCompatActivity(), IHabitAddReciver, IHabitReplaceReciver
     }
 
     override fun goBack() {
-        return
+        val fragment = HabitsListFragment()
+        setFragment(fragment)
+    }
+
+    override fun onEditHabit(habit: EditedHabit) {
+        val fragment = IHabitReplacer.createReplaceFragment(habit) {HabitTypeSelectionFragment()}
+        setFragment(fragment)
     }
 }

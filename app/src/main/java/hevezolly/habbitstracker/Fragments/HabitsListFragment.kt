@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hevezolly.habbitstracker.App
 import hevezolly.habbitstracker.HabitsAdapter
+import hevezolly.habbitstracker.Interfaces.IEditHabitReciver
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.R
 import kotlinx.serialization.decodeFromString
@@ -39,7 +40,9 @@ class HabitsListFragment: Fragment() {
 //            }
 //        }
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = HabitsAdapter(habitsList())
+        adapter = HabitsAdapter(habitsList()){ h ->
+            (activity as? IEditHabitReciver)?.onEditHabit(h)
+        }
         recyclerView.adapter = adapter
     }
 

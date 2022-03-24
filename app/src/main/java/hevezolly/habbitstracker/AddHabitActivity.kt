@@ -35,7 +35,6 @@ class AddHabitActivity : AppCompatActivity() {
         priority = findViewById(R.id.priority)
         periodicity = findViewById(R.id.periodicity)
         length = findViewById(R.id.length)
-        backButton = findViewById(R.id.button_back)
         submitButton = findViewById(R.id.button_submit)
         priorities = resources.getStringArray(R.array.priorities).withIndex()
             .map{ (index, value) -> Pair<String, HabitPriority>(value, HabitPriority(index, value))}

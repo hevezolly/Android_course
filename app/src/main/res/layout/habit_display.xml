@@ -4,26 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+
+    <Button
+        android:id="@+id/edit_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@id/habit_periodicity"
+        app:layout_constraintDimensionRatio="H,1:1"
+        android:background="#00000000"
+        android:drawableEnd="@drawable/edit_habit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.313" />
+
     <TextView
         android:id="@+id/habit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="NAME"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/edit_button"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="25sp"/>
     
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/habit_description"
         android:text="description with \n few lines"
+        app:layout_constraintEnd_toStartOf="@id/edit_button"
         android:textSize="15sp"
         android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/habit_name"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/habit_name"/>
 
     <TextView
         android:id="@+id/habit_priority"

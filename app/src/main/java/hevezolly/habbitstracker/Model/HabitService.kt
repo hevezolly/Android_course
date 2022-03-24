@@ -19,10 +19,5 @@ class HabitService {
     }
 
     init {
-        addHabbit(Habit("test name",
-            "test description",
-            HabitPriority(1, "high"),
-            Color.parseColor("#ffffff"),
-            HabitType.BAD, 10, 100))
     }
 }

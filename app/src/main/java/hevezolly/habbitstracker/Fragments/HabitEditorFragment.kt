@@ -32,7 +32,6 @@ abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragme
     protected lateinit var priorityView: Spinner
     protected lateinit var periodicityView: EditText
     protected lateinit var lengthView: EditText
-    private lateinit var backButton: Button
     private lateinit var submitButton: Button
 
     private lateinit var application: App
@@ -58,7 +57,6 @@ abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragme
         priorityView = view.findViewById(R.id.priority)
         periodicityView = view.findViewById(R.id.periodicity)
         lengthView = view.findViewById(R.id.length)
-        backButton = view.findViewById(R.id.button_back)
         submitButton = view.findViewById(R.id.button_submit)
         return view
     }
@@ -69,7 +67,6 @@ abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragme
         editedHabit?.let {  setInitialHabitParameters(it.habit) }
 
 
-        backButton.setOnClickListener { backReciver?.goBack() }
         submitButton.setOnClickListener {
             val newHabit = constructHabit()
             when {
