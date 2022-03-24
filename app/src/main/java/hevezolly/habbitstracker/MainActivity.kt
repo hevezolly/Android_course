@@ -1,47 +1,82 @@
 package hevezolly.habbitstracker
 
-import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Button
+import androidx.appcompat.widget.Toolbar
+import androidx.customview.widget.Openable
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
+import hevezolly.habbitstracker.Fragments.HabitTypeSelectionFragment
+import hevezolly.habbitstracker.Fragments.HabitsListFragment
+import hevezolly.habbitstracker.Interfaces.IBackReciver
+import hevezolly.habbitstracker.Interfaces.IHabitAddReciver
+import hevezolly.habbitstracker.Interfaces.IHabitReplaceReciver
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.Model.HabitService
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+import kotlinx.android.synthetic.main.main_layout.*
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: HabitsAdapter
-
-    private lateinit var button: FloatingActionButton
+class MainActivity : AppCompatActivity(), IHabitAddReciver, IHabitReplaceReciver, IBackReciver {
 
     private val habitService: HabitService
         get() = (applicationContext as App).habitService
 
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        processIntent()
-        recyclerView = findViewById(R.id.habits_list)
-        button = findViewById(hevezolly.habbitstracker.R.id.fab)
-        adapter = HabitsAdapter(habitService.getHabbits())
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        setContentView(R.layout.main_layout)
+        setSupportActionBar(findViewById(R.id.toolbar))
+        val host = supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
+        val navController = host.navController
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout) as Openable
+        val navView = findViewById<NavigationView>(R.id.nav_view)
+        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+        //setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
 
-        button.setOnClickListener {startActivity(Intent(this, AddHabitActivity::class.java))}
+        navView.menu.findItem(R.id.nav_home).setOnMenuItemClickListener {
+            setFragment(HabitsListFragment())
+            true
+        }
+        navView.menu.findItem(R.id.nav_add_habit).setOnMenuItemClickListener {
+            setFragment(HabitTypeSelectionFragment())
+            true
+        }
     }
 
-    private fun processIntent(){
-        val habitEncoded = intent?.getStringExtra(ADD_HABBIT_KEY)
-        habitEncoded?.let { habitService.addHabbit(Json.decodeFromString(it) as Habit) }
+    private fun setFragment(frag: Fragment){
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, frag)
+            .commit()
+    }
+
+    override fun addHabit(habit: Habit) {
+        habitService.addHabbit(habit)
+        val fragment = HabitsListFragment()
+        setFragment(fragment)
+        //fragment.updateList()
+    }
+
+    override fun replaceHabitAt(index: Int, newHabit: Habit) {
+        habitService.replaceHabitAt(index, newHabit)
     }
 
     companion object{
-        const val ADD_HABBIT_KEY = "add_habbit"
+        private const val MAIN_FRAGMENT_TAG = "main_fragment"
+    }
+
+    override fun goBack() {
+        return
     }
 }

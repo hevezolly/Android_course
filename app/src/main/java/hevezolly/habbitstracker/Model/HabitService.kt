@@ -6,15 +6,23 @@ import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.O)
 class HabitService {
-    private var habbits = mutableListOf<Habit>()
+    private var habits = mutableListOf<Habit>()
 
-    fun getHabbits(): List<Habit> {return habbits}
+    fun getHabbits(): List<Habit> {return habits}
 
     fun addHabbit(h: Habit){
-        habbits.add(h)
+        habits.add(h)
+    }
+
+    fun replaceHabitAt(index: Int, habit: Habit){
+        habits[index] = habit
     }
 
     init {
-
+        addHabbit(Habit("test name",
+            "test description",
+            HabitPriority(1, "high"),
+            Color.parseColor("#ffffff"),
+            HabitType.BAD, 10, 100))
     }
 }

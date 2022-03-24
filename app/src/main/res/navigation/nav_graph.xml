@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/habitsListFragment">
+
+    <fragment
+        android:id="@+id/habitsListFragment"
+        android:name="hevezolly.habbitstracker.Fragments.HabitsListFragment"
+        android:label="HabitsListFragment" >
+        <action
+            android:id="@+id/action_habitsListFragment_to_habitTypeSelectionFragment2"
+            app:destination="@id/habitTypeSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/habitTypeSelectionFragment"
+        android:name="hevezolly.habbitstracker.Fragments.HabitTypeSelectionFragment"
+        android:label="HabitTypeSelectionFragment" />
+</navigation>

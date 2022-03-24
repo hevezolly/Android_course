@@ -1,8 +1,15 @@
 <resources>
-    <string name="app_name">HabbitsTracker</string>
+    <string name="app_name">HabitsTracker</string>
     <string-array name="priorities">
         <item>High</item>
         <item>Middle</item>
         <item>Low</item>
     </string-array>
+    <string-array name="habit_types">
+        <item>Bad</item>
+        <item>Good</item>
+    </string-array>
+    <string name="description_line">Made by Vsevolod Finogenov\nas part of Doubletapp android course</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_add_habit">Add New Habit</string>
 </resources>

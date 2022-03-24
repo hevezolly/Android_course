@@ -74,47 +74,14 @@
         app:layout_constraintStart_toEndOf="@id/priority_prompt"
         app:layout_constraintTop_toTopOf="@id/priority_prompt"
         app:layout_constraintVertical_bias="1.0" />
-    
-    <TextView
-        android:id="@+id/type_prompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_marginTop="10dp"
-        android:paddingRight="20dp"
-        android:text="type:"
-        app:layout_constraintTop_toBottomOf="@id/priority"
-        app:layout_constraintStart_toStartOf="parent"/>
 
-    <RadioGroup
-        android:id="@+id/buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/type_prompt"
-        app:layout_constraintTop_toTopOf="@+id/type_prompt">
-
-        <RadioButton
-            android:id="@+id/button_good"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Good"
-            android:textSize="25sp" />
-
-        <RadioButton
-            android:id="@+id/button_bad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bad"
-            android:textSize="25sp" />
-    </RadioGroup>
 
     <TextView
         android:id="@+id/periodicity_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/buttons"
+        app:layout_constraintTop_toBottomOf="@id/priority"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="25sp"
         android:paddingRight="20dp"
@@ -160,22 +127,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginBottom="28dp"
         android:text="back"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/length"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
 
     <Button
         android:id="@+id/button_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
         android:text="submit"
         android:textSize="25sp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/length"
+        app:layout_constraintVertical_bias="0.9" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

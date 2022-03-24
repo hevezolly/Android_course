@@ -28,12 +28,11 @@ class AddHabitActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_habit)
+        setContentView(R.layout.add_habit_frame)
 
         name = findViewById(hevezolly.habbitstracker.R.id.name)
         description = findViewById(R.id.description)
         priority = findViewById(R.id.priority)
-        goodButton = findViewById(R.id.button_good)
         periodicity = findViewById(R.id.periodicity)
         length = findViewById(R.id.length)
         backButton = findViewById(R.id.button_back)
@@ -72,7 +71,7 @@ class AddHabitActivity : AppCompatActivity() {
     private fun formIntent(habit: Habit?){
         val intent = Intent(this, MainActivity::class.java).apply{
             if (habit != null)
-                putExtra(MainActivity.ADD_HABBIT_KEY, Json.encodeToString(habit))
+                putExtra("a", Json.encodeToString(habit))
         }
         startActivity(intent)
     }

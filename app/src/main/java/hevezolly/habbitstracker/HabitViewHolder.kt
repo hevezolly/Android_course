@@ -1,12 +1,9 @@
 package hevezolly.habbitstracker
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import hevezolly.habbitstracker.Model.Habit
 
@@ -25,7 +22,7 @@ class HabitViewHolder(containerView: View): RecyclerView.ViewHolder(containerVie
         description.text = habit.description
         priority.text ="priority: ${habit.priority.name}"
         type.text ="type: ${habit.type.value}"
-        periodicity.text = "${habit.numberForPerion}/${habit.period}"
+        periodicity.text = "${habit.numberForPeriod}/${habit.period}"
     }
 
 }
