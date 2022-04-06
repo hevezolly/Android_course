@@ -122,6 +122,29 @@
         app:layout_constraintStart_toEndOf="@id/length_prompt"
         android:textSize="25sp"/>
 
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@id/habit_good_button"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/length">
+
+        <RadioButton
+            android:id="@+id/habit_good_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Good"
+            android:textSize="25sp" />
+
+        <RadioButton
+            android:id="@+id/habit_bad_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bad"
+            android:textSize="25sp" />
+    </RadioGroup>
+
     <Button
         android:id="@+id/button_submit"
         android:layout_width="wrap_content"
@@ -132,8 +155,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/length"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        app:layout_constraintVertical_bias="0.8" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

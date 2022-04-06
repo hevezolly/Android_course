@@ -2,7 +2,6 @@ package hevezolly.habbitstracker.Interfaces
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import hevezolly.habbitstracker.Fragments.HabitEditorFragment
 import hevezolly.habbitstracker.Model.EditedHabit
 import hevezolly.habbitstracker.Model.Habit
 import kotlinx.serialization.decodeFromString
@@ -16,7 +15,7 @@ interface IHabitReplacer {
 
         fun <Frag> createReplaceFragment(editedHabit: EditedHabit, factory: () -> Frag): Frag
         where Frag: IHabitReplacer, Frag: Fragment {
-            return createReplaceFragment(editedHabit.index, editedHabit.habit, factory)
+            return createReplaceFragment(editedHabit.index, editedHabit.initialHabit, factory)
         }
 
         fun <Frag> createReplaceFragment(editedHabitIndex: Int, editedHabit: Habit, factory: () -> Frag): Frag
@@ -24,7 +23,7 @@ interface IHabitReplacer {
             val fragment = factory()
             val bundle = fragment.arguments ?: Bundle()
             bundle.putString(EDITED_HABIT_KEY,
-                Json.encodeToString(EditedHabit(editedHabitIndex, editedHabit)))
+                Json.encodeToString(EditedHabit(editedHabitIndex, editedHabit, Habit.Empty)))
             fragment.arguments = bundle
             return fragment
         }

@@ -1,7 +1,6 @@
 package hevezolly.habbitstracker.Model
 
 import android.graphics.Color
-import android.text.Editable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,7 +12,17 @@ data class Habit(
     val type: HabitType,
     val numberForPeriod: Int,
     val period: Int
-)
+){
+    companion object {
+        public val Empty = Habit("",
+            "",
+            HabitPriority(0, ""),
+            Color.parseColor("#00000000"),
+            HabitType.BAD,
+            0,
+            0)
+    }
+}
 
 fun Habit.copy(
     name: String? = null,

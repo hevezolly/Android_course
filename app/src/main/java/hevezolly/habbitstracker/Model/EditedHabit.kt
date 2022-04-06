@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EditedHabit(
     val index: Int,
-    val habit: Habit
+    val initialHabit: Habit,
+    val newHabit: Habit
 )

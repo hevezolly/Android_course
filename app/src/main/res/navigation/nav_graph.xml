@@ -14,6 +14,6 @@
     </fragment>
     <fragment
         android:id="@+id/habitTypeSelectionFragment"
-        android:name="hevezolly.habbitstracker.Fragments.HabitTypeSelectionFragment"
+        android:name="hevezolly.habbitstracker.Fragments.HabitsHubFragment"
         android:label="HabitTypeSelectionFragment" />
 </navigation>

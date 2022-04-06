@@ -2,36 +2,25 @@ package hevezolly.habbitstracker
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Button
-import androidx.appcompat.widget.Toolbar
 import androidx.customview.widget.Openable
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import hevezolly.habbitstracker.Fragments.HabitTypeSelectionFragment
-import hevezolly.habbitstracker.Fragments.HabitsListFragment
-import hevezolly.habbitstracker.Interfaces.*
-import hevezolly.habbitstracker.Model.EditedHabit
-import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.Model.HabitService
-import kotlinx.android.synthetic.main.main_layout.*
+import hevezolly.habbitstracker.ViewModel.MainViewModel
 
-class MainActivity : AppCompatActivity(), IHabitAddReciver, IHabitReplaceReciver, IBackReciver,
-IEditHabitReciver{
+class MainActivity : AppCompatActivity(){
 
     private val habitService: HabitService
         get() = (applicationContext as App).habitService
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,46 +36,26 @@ IEditHabitReciver{
             //setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
         }
+        viewModel = getViewModel()
+        viewModel.mainFragment.observe(this, ::onMainFragmentChanged)
         navView.menu.findItem(R.id.nav_home).setOnMenuItemClickListener {
-            setFragment(HabitsListFragment())
+            viewModel.goToMainScreen()
             true
         }
         navView.menu.findItem(R.id.nav_add_habit).setOnMenuItemClickListener {
-            setFragment(HabitTypeSelectionFragment())
+            viewModel.startHabitAdding()
             true
         }
     }
 
-    private fun setFragment(frag: Fragment){
+    public fun getViewModel(): MainViewModel{
+        return ViewModelProvider(this, MainViewModel.Factory(habitService)
+        )[MainViewModel::class.java]
+    }
+
+    private fun onMainFragmentChanged(frag: Fragment){
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_fragment_container, frag)
             .commit()
-    }
-
-    override fun addHabit(habit: Habit) {
-        habitService.addHabbit(habit)
-        val fragment = HabitsListFragment()
-        setFragment(fragment)
-        //fragment.updateList()
-    }
-
-    override fun replaceHabitAt(index: Int, newHabit: Habit) {
-        habitService.replaceHabitAt(index, newHabit)
-        val fragment = HabitsListFragment()
-        setFragment(fragment)
-    }
-
-    companion object{
-        private const val MAIN_FRAGMENT_TAG = "main_fragment"
-    }
-
-    override fun goBack() {
-        val fragment = HabitsListFragment()
-        setFragment(fragment)
-    }
-
-    override fun onEditHabit(habit: EditedHabit) {
-        val fragment = IHabitReplacer.createReplaceFragment(habit) {HabitTypeSelectionFragment()}
-        setFragment(fragment)
     }
 }

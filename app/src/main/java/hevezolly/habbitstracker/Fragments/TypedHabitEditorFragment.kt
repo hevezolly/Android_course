@@ -1,8 +1,6 @@
 package hevezolly.habbitstracker.Fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.core.util.rangeTo
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.Model.HabitType
 import hevezolly.habbitstracker.R

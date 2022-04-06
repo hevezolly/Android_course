@@ -1,6 +1,5 @@
 package hevezolly.habbitstracker.Model
 
-import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 
@@ -16,6 +15,11 @@ class HabitService {
 
     fun replaceHabitAt(index: Int, habit: Habit){
         habits[index] = habit
+    }
+
+    fun replaceHabit(initialHabit: Habit, newHabit: Habit){
+        val ind = habits.indexOf(initialHabit)
+        replaceHabitAt(ind, newHabit)
     }
 
     init {

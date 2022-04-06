@@ -1,67 +1,78 @@
 package hevezolly.habbitstracker.Fragments
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import hevezolly.habbitstracker.App
+import androidx.viewpager2.widget.ViewPager2
 import hevezolly.habbitstracker.HabitsAdapter
-import hevezolly.habbitstracker.Interfaces.IEditHabitReciver
+import hevezolly.habbitstracker.MainActivity
 import hevezolly.habbitstracker.Model.Habit
+import hevezolly.habbitstracker.Model.HabitType
 import hevezolly.habbitstracker.R
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import hevezolly.habbitstracker.ViewModel.HabitsListViewModel
+
 
 class HabitsListFragment: NavHostFragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HabitsAdapter
 
-    private val habitsList = {(activity?.application as App).habitService.getHabbits()}
+    private lateinit var habitsList: List<Habit>
+
+    private lateinit var viewModel: HabitsListViewModel
+
+    private lateinit var habitType: HabitType
+
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle? ): View {
         val view = inflater.inflate(R.layout.habits_list_fragment, container, false)
+
         recyclerView = view.findViewById(R.id.habits_list)
+        viewModel = ViewModelProvider(
+            activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container) as ViewModelStoreOwner,
+            HabitsListViewModel.Factory(
+                (activity as MainActivity).getViewModel().habitsService)
+        )[HabitsListViewModel::class.java]
+        habitType = (arguments?.getSerializable(HABITS_TYPE_KEY) ?: HabitType.GOOD) as HabitType
+
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        adapter = HabitsAdapter { h ->
+            (activity as? MainActivity)?.getViewModel()?.startHabitEditing(h)
+        }
+        recyclerView.adapter = adapter
+        viewModel.displayedHabits.observe(viewLifecycleOwner, ::onHabitsChanged)
+
         return view
+    }
+
+    private fun onHabitsChanged(habits: List<Habit>){
+        habitsList = habits.filter { it.type == habitType }
+        adapter.setNewHabitsList(habitsList);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        arguments?.let { b ->
-//            b.getStringArrayList(HABITS_LIST_KEY)?.let {
-//                habits = decodedHabitsList(it)
-//            }
-//        }
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = HabitsAdapter(habitsList()){ h ->
-            (activity as? IEditHabitReciver)?.onEditHabit(h)
-        }
-        recyclerView.adapter = adapter
-    }
 
-    public fun updateList(){
-        adapter.notifyItemInserted(habitsList().size-1)
+
     }
 
     companion object{
-        private const val HABITS_LIST_KEY = "habits_list"
+        private const val HABITS_TYPE_KEY = "habits_type"
 
-        private fun encodedHabitsList(habits: List<Habit>) = ArrayList(habits.map { Json.encodeToString(it) })
-
-        private fun decodedHabitsList(encoded: java.util.ArrayList<String>) = encoded.map { Json.decodeFromString<Habit>(it) }
-
-        public fun instantiate(habits: List<Habit>): HabitsListFragment {
+        public fun instantiate(habitType: HabitType): HabitsListFragment {
             val instance = HabitsListFragment()
             val bundle = Bundle()
-            bundle.putStringArrayList(HABITS_LIST_KEY, encodedHabitsList(habits))
+            bundle.putSerializable(HABITS_TYPE_KEY, habitType)
             instance.arguments = bundle
             return instance
         }

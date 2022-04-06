@@ -1,6 +1,5 @@
 package hevezolly.habbitstracker.Fragments
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,21 +8,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import hevezolly.habbitstracker.App
-import hevezolly.habbitstracker.Interfaces.IBackReciver
-import hevezolly.habbitstracker.Interfaces.IHabitAddReciver
-import hevezolly.habbitstracker.Interfaces.IHabitReplaceReciver
-import hevezolly.habbitstracker.Interfaces.IHabitReplacer
-import hevezolly.habbitstracker.Model.EditedHabit
+import hevezolly.habbitstracker.Interfaces.*
+import hevezolly.habbitstracker.MainActivity
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.Model.HabitType
 import hevezolly.habbitstracker.R
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import hevezolly.habbitstracker.ViewModel.HabitEditingViewModel
 
 abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragment(), IHabitReplacer {
 
@@ -34,19 +28,7 @@ abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragme
     protected lateinit var lengthView: EditText
     private lateinit var submitButton: Button
 
-    private lateinit var application: App
-
-    private var habitAddReciver: IHabitAddReciver? = null
-    private var habitReplaceReciver: IHabitReplaceReciver? = null
-    private var backReciver: IBackReciver? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        application = activity?.application as App
-        habitAddReciver = activity as? IHabitAddReciver
-        habitReplaceReciver = activity as? IHabitReplaceReciver
-        backReciver = activity as? IBackReciver
-    }
+    private lateinit var viewModel: HabitEditingViewModel
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -58,22 +40,23 @@ abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragme
         periodicityView = view.findViewById(R.id.periodicity)
         lengthView = view.findViewById(R.id.length)
         submitButton = view.findViewById(R.id.button_submit)
+        val mainViewModel = (activity as MainActivity).getViewModel()
+        viewModel = ViewModelProvider(this, HabitEditingViewModel.Factory(
+                    mainViewModel,
+                    mainViewModel,
+                    IHabitReplacer.getHabitFromArgumentBundle(arguments))
+        )[HabitEditingViewModel::class.java]
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val editedHabit = IHabitReplacer.getHabitFromArgumentBundle(arguments)
-        editedHabit?.let {  setInitialHabitParameters(it.habit) }
+        editedHabit?.let {  setInitialHabitParameters(it.initialHabit) }
 
 
         submitButton.setOnClickListener {
-            val newHabit = constructHabit()
-            when {
-                newHabit == null -> Toast.makeText(activity, "incorrect data", Toast.LENGTH_SHORT).show()
-                editedHabit != null -> habitReplaceReciver?.replaceHabitAt(editedHabit.index, newHabit)
-                else -> habitAddReciver?.addHabit(newHabit)
-            } ?: backReciver?.goBack()
+            viewModel.onNewHabitConfigured(constructHabit())
         }
     }
 
@@ -88,10 +71,10 @@ abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragme
     protected open fun constructHabit(): Habit? {
         val p = periodicityView.text.toString().toIntOrNull()
         val l = lengthView.text.toString().toIntOrNull()
-        val pr = application.priorities[priorityView.selectedItem.toString()]
+        val pr = (activity?.application as App).priorities[priorityView.selectedItem.toString()]
         val n = nameView.text.toString()
         var habit: Habit? = null
-        if (p != null && l != null && pr != null && n != "")
+        if (p != null && l != null && pr != null)
         {
             habit = Habit(n,
                 descriptionView.text.toString(), pr, Color.parseColor("#ffffff"),
