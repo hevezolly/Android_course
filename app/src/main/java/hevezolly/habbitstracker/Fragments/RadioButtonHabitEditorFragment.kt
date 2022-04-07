@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.Model.HabitType
+import hevezolly.habbitstracker.Model.edit
 import hevezolly.habbitstracker.R
 
 class RadioButtonHabitEditorFragment : HabitEditorFragment(R.layout.add_habit_frame) {
@@ -27,6 +28,6 @@ class RadioButtonHabitEditorFragment : HabitEditorFragment(R.layout.add_habit_fr
         val baseHabit = super.constructHabit()
         var type = HabitType.BAD
         if (goodRadioButton.isChecked) type = HabitType.GOOD
-        return baseHabit?.copy(type=type)
+        return baseHabit?.edit(type=type)
     }
 }

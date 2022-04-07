@@ -1,60 +1,70 @@
 package hevezolly.habbitstracker.ViewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import android.app.Activity
+import android.util.Log
+import androidx.lifecycle.*
+import hevezolly.habbitstracker.App
 import hevezolly.habbitstracker.Model.Habit
-import hevezolly.habbitstracker.Model.HabitService
+import hevezolly.habbitstracker.HabitService
 
 public typealias HabitsFilter = (Habit) -> Boolean
 public typealias HabitsSorter = (Habit) -> Float
 
 class HabitsListViewModel(
-private val habitsService: HabitService
+private val habitsService: HabitService,
+private val lifeCycle: LifecycleOwner
 ): ViewModel() {
 
     private val displayedHabitsMutable: MutableLiveData<List<Habit>> = MutableLiveData()
 
+    private var activeHabitsList: List<Habit> = listOf()
+
     val displayedHabits: LiveData<List<Habit>> = displayedHabitsMutable
 
     init {
-        displayedHabitsMutable.value = habitsService.getHabbits()
+        habitsService.getHabbits().observe(lifeCycle, ::updateHabits)
+    }
+
+    private fun updateHabits(habits: List<Habit>){
+        activeHabitsList = habits
+        Log.d("DEBUG", habits.size.toString())
+        Log.d("DEBUG", this::class.java.name)
+        applyChanges()
     }
 
     private var filter: HabitsFilter = {true}
     private var sorter: HabitsSorter? = null
 
-    public fun applyFilter(filter: HabitsFilter): HabitsListViewModel{
+    fun applyFilter(filter: HabitsFilter): HabitsListViewModel{
         this.filter = filter
         return this
     }
 
-    public fun applySorter(sorter: HabitsSorter?): HabitsListViewModel{
+    fun applySorter(sorter: HabitsSorter?): HabitsListViewModel{
         this.sorter = sorter
         return this
     }
 
-    public fun applyTextFilter(text: String): HabitsListViewModel{
+    fun applyTextFilter(text: String): HabitsListViewModel{
         filter = {text == "" || it.name.startsWith(text)}
         return this
     }
 
-    public fun applyChanges(){
-        val filtered = habitsService.getHabbits().filter(filter)
+    fun applyChanges(){
+        val filtered = activeHabitsList.filter(filter)
         displayedHabitsMutable.value = sorter?.let { filtered.sortedBy(it) } ?: filtered
     }
 
-    public fun clear(){
+    fun clear(){
         applyFilter { true }
             .applySorter(null)
             .applyChanges()
     }
 
     companion object {
-        public fun Factory(habitsService: HabitService) = object : ViewModelProvider.Factory{
+        fun Factory(habitsService: HabitService, lifecycle: LifecycleOwner) = object : ViewModelProvider.Factory{
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return HabitsListViewModel(habitsService) as T
+                return HabitsListViewModel(habitsService, lifecycle) as T
             }
 
         }

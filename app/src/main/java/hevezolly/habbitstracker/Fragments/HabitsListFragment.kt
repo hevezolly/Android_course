@@ -1,19 +1,18 @@
 package hevezolly.habbitstracker.Fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import hevezolly.habbitstracker.HabitsAdapter
+import hevezolly.habbitstracker.Interfaces.IHabitActions
 import hevezolly.habbitstracker.MainActivity
+import hevezolly.habbitstracker.Model.EditedHabit
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.Model.HabitType
 import hevezolly.habbitstracker.R
@@ -38,17 +37,26 @@ class HabitsListFragment: NavHostFragment() {
         val view = inflater.inflate(R.layout.habits_list_fragment, container, false)
 
         recyclerView = view.findViewById(R.id.habits_list)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)
         viewModel = ViewModelProvider(
-            activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container) as ViewModelStoreOwner,
+            fragment as ViewModelStoreOwner,
             HabitsListViewModel.Factory(
-                (activity as MainActivity).getViewModel().habitsService)
+                (activity as MainActivity).getViewModel().habitsService,
+                fragment as LifecycleOwner)
         )[HabitsListViewModel::class.java]
         habitType = (arguments?.getSerializable(HABITS_TYPE_KEY) ?: HabitType.GOOD) as HabitType
 
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = HabitsAdapter { h ->
-            (activity as? MainActivity)?.getViewModel()?.startHabitEditing(h)
-        }
+        val mainViewModel = (activity as? MainActivity)?.getViewModel()
+        adapter = HabitsAdapter(object : IHabitActions {
+            override fun onEdit(habit: EditedHabit) {
+                mainViewModel?.startHabitEditing(habit)
+            }
+
+            override fun onDelete(habit: EditedHabit) {
+                mainViewModel?.deleteHabit(habit.initialHabit)
+            }
+        })
         recyclerView.adapter = adapter
         viewModel.displayedHabits.observe(viewLifecycleOwner, ::onHabitsChanged)
 

@@ -18,6 +18,19 @@
 
         app:layout_constraintVertical_bias="0.313" />
 
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@id/habit_periodicity"
+        app:layout_constraintDimensionRatio="H,1:1"
+        android:background="#00000000"
+        android:drawableTop="@drawable/delete_habit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.313" />
+
     <TextView
         android:id="@+id/habit_name"
         android:layout_width="wrap_content"

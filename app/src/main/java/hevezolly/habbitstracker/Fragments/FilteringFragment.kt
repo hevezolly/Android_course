@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -30,7 +31,7 @@ class FilteringFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(parentFragment as ViewModelStoreOwner, HabitsListViewModel.Factory(
-            (activity as MainActivity).getViewModel().habitsService
+            (activity as MainActivity).getViewModel().habitsService, parentFragment as LifecycleOwner
         ))[HabitsListViewModel::class.java]
         val view = inflater.inflate(R.layout.filter_fragment, container, false)
         val filterText = view.findViewById<EditText>(R.id.filter_text)

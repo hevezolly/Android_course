@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class HabitPriority(
     val value: Int,
-    val name: String
+    val priorityName: String
 )

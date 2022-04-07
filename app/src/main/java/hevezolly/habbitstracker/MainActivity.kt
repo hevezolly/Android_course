@@ -5,12 +5,13 @@ import android.os.Bundle
 import androidx.customview.widget.Openable
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import hevezolly.habbitstracker.Model.HabitService
 import hevezolly.habbitstracker.ViewModel.MainViewModel
 
 class MainActivity : AppCompatActivity(){

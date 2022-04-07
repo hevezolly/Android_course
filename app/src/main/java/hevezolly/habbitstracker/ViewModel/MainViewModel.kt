@@ -13,7 +13,7 @@ import hevezolly.habbitstracker.Interfaces.IHabitReplaceReciver
 import hevezolly.habbitstracker.Interfaces.IHabitReplacer
 import hevezolly.habbitstracker.Model.EditedHabit
 import hevezolly.habbitstracker.Model.Habit
-import hevezolly.habbitstracker.Model.HabitService
+import hevezolly.habbitstracker.HabitService
 
 class MainViewModel(
 val habitsService: HabitService
@@ -48,6 +48,10 @@ val habitsService: HabitService
 
     fun goToMainScreen(){
         mutableMainFragment.value = HabitsHubFragment()
+    }
+
+    fun deleteHabit(habit: Habit){
+        habitsService.deleteHabit(habit)
     }
 
     companion object{

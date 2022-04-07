@@ -3,6 +3,7 @@ package hevezolly.habbitstracker.Fragments
 import android.os.Bundle
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.Model.HabitType
+import hevezolly.habbitstracker.Model.edit
 import hevezolly.habbitstracker.R
 
 open class TypedHabitEditorFragment():
@@ -14,7 +15,7 @@ open class TypedHabitEditorFragment():
         arguments?.getString(HABIT_KEY)?.let{
             type = HabitType.byName(it)
         }
-        return type?.let { habit?.copy(type = it) }
+        return type?.let { habit?.edit(type = it) }
     }
     companion object {
         private const val HABIT_KEY = "habit_type"

@@ -1,12 +1,13 @@
-package hevezolly.habbitstracker
+package hevezolly.habbitstracker.Fragments
 
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import hevezolly.habbitstracker.Interfaces.IHabitEntryActions
 import hevezolly.habbitstracker.Model.Habit
+import hevezolly.habbitstracker.R
 
 class HabitViewHolder(containerView: View): RecyclerView.ViewHolder(containerView){
 
@@ -16,16 +17,17 @@ class HabitViewHolder(containerView: View): RecyclerView.ViewHolder(containerVie
     private val type: TextView = containerView.findViewById(R.id.habit_type)
     private val periodicity: TextView = containerView.findViewById(R.id.habit_periodicity)
     private val editButton: Button = containerView.findViewById(R.id.edit_button)
-    private val habitMain: ConstraintLayout = containerView.findViewById(R.id.habit_main)
+    private val deleteButton: Button = containerView.findViewById(R.id.delete_button)
 
     @SuppressLint("SetTextI18n")
-    fun bind(habit: Habit, editAction: () -> Unit){
+    fun bind(habit: Habit, editActions: IHabitEntryActions){
         name.text = habit.name
         description.text = habit.description
-        priority.text ="priority: ${habit.priority.name}"
+        priority.text ="priority: ${habit.priority.priorityName}"
         type.text ="type: ${habit.type.value}"
         periodicity.text = "${habit.numberForPeriod}/${habit.period}"
-        editButton.setOnClickListener { editAction() }
+        editButton.setOnClickListener { editActions.onEdit() }
+        deleteButton.setOnClickListener { editActions.onDelete() }
     }
 
 }

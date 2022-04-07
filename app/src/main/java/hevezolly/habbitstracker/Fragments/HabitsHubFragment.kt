@@ -42,7 +42,8 @@ class HabitsHubFragment: NavHostFragment(), IHabitReplacer {
         viewModel = ViewModelProvider(
             this,
             HabitsListViewModel.Factory(
-                (activity as MainActivity).getViewModel().habitsService)
+                (activity as MainActivity).getViewModel().habitsService,
+            this)
         )[HabitsListViewModel::class.java]
 
         adapter = HabitListPagerAdapter(
