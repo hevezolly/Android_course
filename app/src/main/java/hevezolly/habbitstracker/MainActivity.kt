@@ -5,13 +5,12 @@ import android.os.Bundle
 import androidx.customview.widget.Openable
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import hevezolly.habbitstracker.Screens.IScreen
 import hevezolly.habbitstracker.ViewModel.MainViewModel
 
 class MainActivity : AppCompatActivity(){
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity(){
             navView.setupWithNavController(navController)
         }
         viewModel = getViewModel()
-        viewModel.mainFragment.observe(this, ::onMainFragmentChanged)
+        viewModel.currentScreen.observe(this, ::onMainScreenChanged)
         navView.menu.findItem(R.id.nav_home).setOnMenuItemClickListener {
             viewModel.goToMainScreen()
             true
@@ -54,9 +53,9 @@ class MainActivity : AppCompatActivity(){
         )[MainViewModel::class.java]
     }
 
-    private fun onMainFragmentChanged(frag: Fragment){
+    private fun onMainScreenChanged(screen: IScreen){
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_container, frag)
+            .replace(R.id.main_fragment_container, screen.getFragment())
             .commit()
     }
 }

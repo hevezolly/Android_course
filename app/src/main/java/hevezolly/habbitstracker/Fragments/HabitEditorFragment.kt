@@ -60,7 +60,7 @@ abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragme
         }
     }
 
-    private fun setInitialHabitParameters(habit: Habit){
+    protected open fun setInitialHabitParameters(habit: Habit){
         nameView.setText(habit.name)
         descriptionView.setText(habit.description)
         priorityView.setSelection(habit.priority.value)

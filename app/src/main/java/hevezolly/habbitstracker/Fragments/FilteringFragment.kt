@@ -3,7 +3,6 @@ package hevezolly.habbitstracker.Fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.FrameMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +39,6 @@ class FilteringFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("Text Changed", p0.toString())
                 viewModel.applyTextFilter(p0.toString()).applyChanges()
             }
 

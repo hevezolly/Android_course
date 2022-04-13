@@ -1,6 +1,5 @@
 package hevezolly.habbitstracker.ViewModel
 
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,14 +13,29 @@ import hevezolly.habbitstracker.Interfaces.IHabitReplacer
 import hevezolly.habbitstracker.Model.EditedHabit
 import hevezolly.habbitstracker.Model.Habit
 import hevezolly.habbitstracker.HabitService
+import hevezolly.habbitstracker.Screens.ConstructHabitScreen
+import hevezolly.habbitstracker.Screens.IScreen
+import hevezolly.habbitstracker.Screens.MainScreen
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 class MainViewModel(
 val habitsService: HabitService
-): ViewModel(), IHabitEditor, IHabitAddReciver, IHabitReplaceReciver {
+): ViewModel(), IHabitEditor, IHabitAddReciver, IHabitReplaceReciver, CoroutineScope {
 
-    private val mutableMainFragment: MutableLiveData<Fragment> = MutableLiveData()
+    private val currentScreenMut: MutableLiveData<IScreen> = MutableLiveData()
 
-    val mainFragment: LiveData<Fragment> = mutableMainFragment
+    private val job = SupervisorJob()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job + CoroutineExceptionHandler {_, e -> throw e}
+
+    override fun onCleared() {
+        super.onCleared()
+        coroutineContext.cancelChildren()
+    }
+
+
+    val currentScreen: LiveData<IScreen> = currentScreenMut
 
     init {
         //mutableMainFragment.value = Fragment(R.layout.habits_display_hub)
@@ -29,29 +43,37 @@ val habitsService: HabitService
     }
 
     override fun startHabitEditing(habit: EditedHabit) {
-        mutableMainFragment.value = IHabitReplacer.createReplaceFragment(habit) { RadioButtonHabitEditorFragment() }
+        currentScreenMut.value = ConstructHabitScreen(habit)
     }
 
     override fun startHabitAdding() {
-        mutableMainFragment.value = RadioButtonHabitEditorFragment()
+        currentScreenMut.value = ConstructHabitScreen()
     }
 
     override fun addHabit(habit: Habit) {
-        habitsService.addHabbit(habit)
-        goToMainScreen()
+        launch {
+            withContext(Dispatchers.IO) { habitsService.addHabbit(habit) }
+            goToMainScreen()
+        }
     }
 
     override fun replaceHabit(editedHabit: EditedHabit) {
-        habitsService.replaceHabit(editedHabit.initialHabit, editedHabit.newHabit)
-        goToMainScreen()
+        launch {
+            withContext(Dispatchers.IO){
+                habitsService.replaceHabit(editedHabit.initialHabit, editedHabit.newHabit)
+            }
+            goToMainScreen()
+        }
     }
 
     fun goToMainScreen(){
-        mutableMainFragment.value = HabitsHubFragment()
+        currentScreenMut.value = MainScreen()
     }
 
     fun deleteHabit(habit: Habit){
-        habitsService.deleteHabit(habit)
+        launch(Dispatchers.IO) {
+            habitsService.deleteHabit(habit)
+        }
     }
 
     companion object{
@@ -61,4 +83,6 @@ val habitsService: HabitService
             }
         }
     }
+
+
 }

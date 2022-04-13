@@ -27,8 +27,6 @@ private val lifeCycle: LifecycleOwner
 
     private fun updateHabits(habits: List<Habit>){
         activeHabitsList = habits
-        Log.d("DEBUG", habits.size.toString())
-        Log.d("DEBUG", this::class.java.name)
         applyChanges()
     }
 
