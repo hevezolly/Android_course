@@ -77,7 +77,7 @@ abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragme
         if (p != null && l != null && pr != null)
         {
             habit = Habit(n,
-                descriptionView.text.toString(), pr, Color.parseColor("#ffffff"),
+                descriptionView.text.toString(), pr,
                 HabitType.BAD, p, l)
         }
         return habit

@@ -40,6 +40,9 @@ val habitsService: HabitService
     init {
         //mutableMainFragment.value = Fragment(R.layout.habits_display_hub)
         goToMainScreen()
+        launch(Dispatchers.IO){
+            habitsService.syncDatabaseWithNetwork()
+        }
     }
 
     override fun startHabitEditing(habit: EditedHabit) {

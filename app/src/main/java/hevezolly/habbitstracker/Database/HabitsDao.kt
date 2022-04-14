@@ -18,4 +18,7 @@ interface HabitsDao {
 
     @Query("SELECT * FROM habit")
     fun getHabits(): LiveData<List<Habit>>
+
+    @Query("SELECT * FROM habit WHERE uid = :uid")
+    fun getHabitsByUid(uid: String): List<Habit>
 }
