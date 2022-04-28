@@ -1,32 +1,40 @@
 package hevezolly.habbitstracker
 
 import android.app.Application
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import hevezolly.habbitstracker.Model.Habit
-import hevezolly.habbitstracker.Model.HabitPriority
-import hevezolly.habbitstracker.Network.HabitJsonDeserializer
-import hevezolly.habbitstracker.Network.HabitJsonSerialiser
-import hevezolly.habbitstracker.Network.Uid
+import hevezolly.habbitstracker.domain.Model.Habit
+import hevezolly.habbitstracker.domain.Model.HabitPriority
+import hevezolly.habbitstracker.data.Network.HabitJsonDeserializer
+import hevezolly.habbitstracker.data.Network.HabitJsonSerialiser
+import hevezolly.habbitstracker.data.HabitRepositry
+import hevezolly.habbitstracker.injection.ApplicationComponent
+import hevezolly.habbitstracker.injection.DaggerApplicationComponent
+import hevezolly.habbitstracker.injection.ImplementedDependencyProvider
 import retrofit2.converter.gson.GsonConverterFactory
 
 class App: Application() {
 
-    lateinit var priorities : Map<String, HabitPriority>
-    lateinit var habitService: HabitService
+    lateinit var applicationComponent: ApplicationComponent
+        private set
 
     override fun onCreate() {
         super.onCreate()
-        priorities = resources.getStringArray(R.array.priorities).withIndex()
-            .associate { (index, value) -> Pair(value, HabitPriority(index, value)) }
+
         val pIndexMap = resources.getStringArray(R.array.priorities).withIndex()
             .associate { (index, value) -> Pair(index, HabitPriority(index, value)) }
         val gson = GsonBuilder()
             .registerTypeAdapter(Habit::class.java, HabitJsonSerialiser())
             .registerTypeAdapter(Habit::class.java, HabitJsonDeserializer{ pIndexMap[it]!! })
             .create()
-        habitService = HabitService(this, GsonConverterFactory.create(gson),
+         HabitRepositry(this, GsonConverterFactory.create(gson),
             resources.getString(R.string.Authorization))
+
+        applicationComponent = DaggerApplicationComponent.builder()
+            .implementedDependencyProvider(ImplementedDependencyProvider(
+                this,
+                GsonConverterFactory.create(gson),
+                resources.getString(R.string.Authorization))
+            ).build()
 
     }
 

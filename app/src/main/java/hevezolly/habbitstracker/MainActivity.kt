@@ -4,26 +4,29 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.customview.widget.Openable
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import hevezolly.habbitstracker.Screens.IScreen
-import hevezolly.habbitstracker.ViewModel.MainViewModel
+import hevezolly.habbitstracker.domain.useCases.EditHabitsListUseCase
+import hevezolly.habbitstracker.presentation.Fragments.IInjectTarget
+import hevezolly.habbitstracker.presentation.Screens.IScreen
+import hevezolly.habbitstracker.presentation.ViewModel.MainViewModel
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(){
-
-    private val habitService: HabitService
-        get() = (applicationContext as App).habitService
+class MainActivity : AppCompatActivity(), IInjectTarget{
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    @Inject
+    lateinit var editHabitsListUseCase: EditHabitsListUseCase
 
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (application as App).applicationComponent.inject(this)
         setContentView(R.layout.main_layout)
         val navView = findViewById<NavigationView>(R.id.nav_view)
         if (savedInstanceState == null) {
@@ -49,7 +52,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     public fun getViewModel(): MainViewModel{
-        return ViewModelProvider(this, MainViewModel.Factory(habitService)
+        return ViewModelProvider(this, MainViewModel.Factory(editHabitsListUseCase)
         )[MainViewModel::class.java]
     }
 
