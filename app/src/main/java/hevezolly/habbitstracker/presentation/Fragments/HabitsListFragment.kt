@@ -12,16 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hevezolly.habbitstracker.App
 import hevezolly.habbitstracker.MainActivity
-import hevezolly.habbitstracker.domain.Model.EditedHabit
-import hevezolly.habbitstracker.domain.Model.Habit
-import hevezolly.habbitstracker.domain.Model.HabitType
+import hevezolly.habitstracker.domain.Model.EditedHabit
+import hevezolly.habitstracker.domain.Model.Habit
+import hevezolly.habitstracker.domain.Model.HabitType
 import hevezolly.habbitstracker.R
-import hevezolly.habbitstracker.domain.useCases.ObserveHabitsListUseCase
+import hevezolly.habitstracker.domain.useCases.ObserveHabitsListUseCase
 import hevezolly.habbitstracker.presentation.ViewModel.HabitsListViewModel
+import hevezolly.habitstracker.domain.useCases.HabitsListFilterUseCase
 import javax.inject.Inject
 
 
-class HabitsListFragment: NavHostFragment(), IInjectTarget {
+class HabitsListFragment: NavHostFragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HabitsAdapter
@@ -34,6 +35,9 @@ class HabitsListFragment: NavHostFragment(), IInjectTarget {
 
     @Inject
     lateinit var getHabitsListUseCase: ObserveHabitsListUseCase
+
+    @Inject
+    lateinit var filterHabitsUseCase: HabitsListFilterUseCase
 
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -49,6 +53,7 @@ class HabitsListFragment: NavHostFragment(), IInjectTarget {
         viewModel = ViewModelProvider(
             fragment as ViewModelStoreOwner,
             HabitsListViewModel.Factory(
+                filterHabitsUseCase,
                 getHabitsListUseCase,
                 fragment as LifecycleOwner)
         )[HabitsListViewModel::class.java]
@@ -63,6 +68,10 @@ class HabitsListFragment: NavHostFragment(), IInjectTarget {
 
             override fun onDelete(habit: EditedHabit) {
                 mainViewModel?.deleteHabit(habit.initialHabit)
+            }
+
+            override fun onComplete(habit: Habit) {
+                mainViewModel?.completedHabit(habit)
             }
         })
         recyclerView.adapter = adapter

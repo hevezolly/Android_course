@@ -12,15 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import hevezolly.habbitstracker.App
 import hevezolly.habbitstracker.MainActivity
-import hevezolly.habbitstracker.domain.Model.Habit
-import hevezolly.habbitstracker.domain.Model.HabitType
+import hevezolly.habitstracker.domain.Model.Habit
+import hevezolly.habitstracker.domain.Model.HabitType
 import hevezolly.habbitstracker.R
-import hevezolly.habbitstracker.domain.Model.HabitPriority
+import hevezolly.habitstracker.domain.Model.HabitPriority
 import hevezolly.habbitstracker.presentation.ViewModel.HabitEditingViewModel
 import javax.inject.Inject
 
 abstract class HabitEditorFragment(@LayoutRes private val layoutId: Int): Fragment(),
-    IHabitReplacer, IInjectTarget {
+    IHabitReplacer {
 
     protected lateinit var nameView: EditText
     protected lateinit var descriptionView: EditText

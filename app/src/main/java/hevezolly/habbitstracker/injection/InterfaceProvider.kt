@@ -2,11 +2,8 @@ package hevezolly.habbitstracker.injection
 
 import dagger.Binds
 import dagger.Module
-import hevezolly.habbitstracker.data.HabitRepositry
-import hevezolly.habbitstracker.domain.useCases.IHabitAddReciver
-import hevezolly.habbitstracker.domain.useCases.IHabitDeleteReciver
-import hevezolly.habbitstracker.domain.useCases.IHabitReplaceReciver
-import hevezolly.habbitstracker.domain.useCases.IHabitsListProvider
+import hevezolly.habitstracker.data.HabitRepositry
+import hevezolly.habitstracker.domain.useCases.*
 
 @Module
 abstract class InterfaceProvider {
@@ -22,4 +19,7 @@ abstract class InterfaceProvider {
 
     @Binds
     abstract fun getHabits(habitRepositry: HabitRepositry): IHabitsListProvider
+
+    @Binds
+    abstract fun completeReciver(habitRepositry: HabitRepositry): IHabitCompleteReciver
 }

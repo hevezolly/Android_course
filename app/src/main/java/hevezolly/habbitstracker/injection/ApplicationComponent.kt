@@ -3,6 +3,7 @@ package hevezolly.habbitstracker.injection
 import dagger.Component
 import hevezolly.habbitstracker.MainActivity
 import hevezolly.habbitstracker.presentation.Fragments.*
+import hevezolly.habitstracker.data.HabitRepositry
 import javax.inject.Singleton
 
 @Singleton

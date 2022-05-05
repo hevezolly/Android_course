@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import hevezolly.habbitstracker.domain.Model.Habit
+import hevezolly.habitstracker.domain.Model.Habit
 import hevezolly.habbitstracker.R
 
 class HabitViewHolder(containerView: View): RecyclerView.ViewHolder(containerView){
@@ -17,6 +17,7 @@ class HabitViewHolder(containerView: View): RecyclerView.ViewHolder(containerVie
     private val periodicity: TextView = containerView.findViewById(R.id.habit_periodicity)
     private val editButton: Button = containerView.findViewById(R.id.edit_button)
     private val deleteButton: Button = containerView.findViewById(R.id.delete_button)
+    private val completeButton: Button = containerView.findViewById(R.id.button_complete)
 
     @SuppressLint("SetTextI18n")
     fun bind(habit: Habit, editActions: IHabitEntryActions){
@@ -24,9 +25,10 @@ class HabitViewHolder(containerView: View): RecyclerView.ViewHolder(containerVie
         description.text = habit.description
         priority.text ="priority: ${habit.priority.priorityName}"
         type.text ="type: ${habit.type.value}"
-        periodicity.text = "${habit.numberForPeriod}/${habit.period}"
+        periodicity.text = "${habit.doneDates.size}/${habit.numberForPeriod}"
         editButton.setOnClickListener { editActions.onEdit() }
         deleteButton.setOnClickListener { editActions.onDelete() }
+        completeButton.setOnClickListener { editActions.onComplete() }
     }
 
 }

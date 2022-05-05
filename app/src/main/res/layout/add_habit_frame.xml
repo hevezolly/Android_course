@@ -85,7 +85,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="25sp"
         android:paddingRight="20dp"
-        android:text="periodicity:"/>
+        android:text="times:"/>
 
     <EditText
         android:id="@+id/periodicity"
@@ -108,7 +108,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="25sp"
         android:paddingRight="20dp"
-        android:text="days span:"/>
+        android:text="seconds span:"/>
 
     <EditText
         android:id="@+id/length"

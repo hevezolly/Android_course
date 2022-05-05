@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import hevezolly.habbitstracker.domain.Model.Habit
-import hevezolly.habbitstracker.domain.Model.HabitType
-import hevezolly.habbitstracker.domain.Model.edit
+import hevezolly.habitstracker.domain.Model.Habit
+import hevezolly.habitstracker.domain.Model.HabitType
+import hevezolly.habitstracker.domain.Model.edit
 import hevezolly.habbitstracker.R
 
 class RadioButtonHabitEditorFragment : HabitEditorFragment(R.layout.add_habit_frame) {

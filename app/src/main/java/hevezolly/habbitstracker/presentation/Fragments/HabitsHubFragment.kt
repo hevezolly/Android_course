@@ -11,13 +11,13 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import hevezolly.habbitstracker.App
-import hevezolly.habbitstracker.MainActivity
 import hevezolly.habbitstracker.R
-import hevezolly.habbitstracker.domain.useCases.ObserveHabitsListUseCase
+import hevezolly.habitstracker.domain.useCases.ObserveHabitsListUseCase
 import hevezolly.habbitstracker.presentation.ViewModel.HabitsListViewModel
+import hevezolly.habitstracker.domain.useCases.HabitsListFilterUseCase
 import javax.inject.Inject
 
-class HabitsHubFragment: NavHostFragment(), IHabitReplacer, IInjectTarget {
+class HabitsHubFragment: NavHostFragment(), IHabitReplacer {
 
     private lateinit var habitsPager: ViewPager2
     private lateinit var viewModel: HabitsListViewModel
@@ -26,6 +26,9 @@ class HabitsHubFragment: NavHostFragment(), IHabitReplacer, IInjectTarget {
 
     @Inject
     lateinit var getHabitsListUseCase: ObserveHabitsListUseCase
+
+    @Inject
+    lateinit var habitsListFilterUseCase: HabitsListFilterUseCase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +42,7 @@ class HabitsHubFragment: NavHostFragment(), IHabitReplacer, IInjectTarget {
         viewModel = ViewModelProvider(
             this,
             HabitsListViewModel.Factory(
+                habitsListFilterUseCase,
                 getHabitsListUseCase,
             this)
         )[HabitsListViewModel::class.java]

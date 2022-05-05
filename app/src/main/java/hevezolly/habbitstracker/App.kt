@@ -2,11 +2,11 @@ package hevezolly.habbitstracker
 
 import android.app.Application
 import com.google.gson.GsonBuilder
-import hevezolly.habbitstracker.domain.Model.Habit
-import hevezolly.habbitstracker.domain.Model.HabitPriority
-import hevezolly.habbitstracker.data.Network.HabitJsonDeserializer
-import hevezolly.habbitstracker.data.Network.HabitJsonSerialiser
-import hevezolly.habbitstracker.data.HabitRepositry
+import hevezolly.habitstracker.domain.Model.Habit
+import hevezolly.habitstracker.domain.Model.HabitPriority
+import hevezolly.habitstracker.data.Network.HabitJsonDeserializer
+import hevezolly.habitstracker.data.Network.HabitJsonSerialiser
+import hevezolly.habitstracker.data.HabitRepositry
 import hevezolly.habbitstracker.injection.ApplicationComponent
 import hevezolly.habbitstracker.injection.DaggerApplicationComponent
 import hevezolly.habbitstracker.injection.ImplementedDependencyProvider
@@ -26,19 +26,16 @@ class App: Application() {
             .registerTypeAdapter(Habit::class.java, HabitJsonSerialiser())
             .registerTypeAdapter(Habit::class.java, HabitJsonDeserializer{ pIndexMap[it]!! })
             .create()
-         HabitRepositry(this, GsonConverterFactory.create(gson),
-            resources.getString(R.string.Authorization))
 
         applicationComponent = DaggerApplicationComponent.builder()
             .implementedDependencyProvider(ImplementedDependencyProvider(
                 this,
                 GsonConverterFactory.create(gson),
-                resources.getString(R.string.Authorization))
+                resources.getString(R.string.Authorisation))
             ).build()
-
     }
 
     companion object{
-        public val DATABASE_NAME = "habits_database"
+        val DATABASE_NAME = "habits_database"
     }
 }

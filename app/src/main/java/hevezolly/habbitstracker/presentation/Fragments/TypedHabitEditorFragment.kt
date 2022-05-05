@@ -1,9 +1,9 @@
 package hevezolly.habbitstracker.presentation.Fragments
 
 import android.os.Bundle
-import hevezolly.habbitstracker.domain.Model.Habit
-import hevezolly.habbitstracker.domain.Model.HabitType
-import hevezolly.habbitstracker.domain.Model.edit
+import hevezolly.habitstracker.domain.Model.Habit
+import hevezolly.habitstracker.domain.Model.HabitType
+import hevezolly.habitstracker.domain.Model.edit
 import hevezolly.habbitstracker.R
 
 open class TypedHabitEditorFragment():

@@ -2,6 +2,8 @@ package hevezolly.habbitstracker
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.customview.widget.Openable
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -9,18 +11,23 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import hevezolly.habbitstracker.domain.useCases.EditHabitsListUseCase
-import hevezolly.habbitstracker.presentation.Fragments.IInjectTarget
+import hevezolly.habitstracker.domain.useCases.EditHabitsListUseCase
 import hevezolly.habbitstracker.presentation.Screens.IScreen
 import hevezolly.habbitstracker.presentation.ViewModel.MainViewModel
+import hevezolly.habitstracker.domain.Model.HabitComplete
+import hevezolly.habitstracker.domain.Model.HabitCompleteType
+import hevezolly.habitstracker.domain.useCases.DoneHabitUseCase
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), IInjectTarget{
+class MainActivity : AppCompatActivity(){
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     @Inject
     lateinit var editHabitsListUseCase: EditHabitsListUseCase
+
+    @Inject
+    lateinit var completeHabitUseCase: DoneHabitUseCase
 
     private lateinit var viewModel: MainViewModel
 
@@ -40,6 +47,7 @@ class MainActivity : AppCompatActivity(), IInjectTarget{
             navView.setupWithNavController(navController)
         }
         viewModel = getViewModel()
+        viewModel.displayedEncourage.observe(this, ::onEncourageChange)
         viewModel.currentScreen.observe(this, ::onMainScreenChanged)
         navView.menu.findItem(R.id.nav_home).setOnMenuItemClickListener {
             viewModel.goToMainScreen()
@@ -52,7 +60,7 @@ class MainActivity : AppCompatActivity(), IInjectTarget{
     }
 
     public fun getViewModel(): MainViewModel{
-        return ViewModelProvider(this, MainViewModel.Factory(editHabitsListUseCase)
+        return ViewModelProvider(this, MainViewModel.Factory(completeHabitUseCase, editHabitsListUseCase)
         )[MainViewModel::class.java]
     }
 
@@ -60,5 +68,19 @@ class MainActivity : AppCompatActivity(), IInjectTarget{
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_fragment_container, screen.getFragment())
             .commit()
+    }
+
+    private fun onEncourageChange(complete: HabitComplete?){
+        if (complete == null)
+            return
+        val text = when (complete.type){
+            HabitCompleteType.NONE -> resources.getString(R.string.encourage_none)
+            HabitCompleteType.GOOD_MORE -> resources.getString(R.string.encourage_good_more)
+            HabitCompleteType.GOOD_LESS -> resources.getString(R.string.encourage_good_less).replace("#", complete.rest.toString())
+            HabitCompleteType.BAD_MORE -> resources.getString(R.string.encourage_bad_more)
+            else -> resources.getString(R.string.encourage_bad_less).replace("#", complete.rest.toString())
+        }
+        Log.d("TEST", text)
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 }

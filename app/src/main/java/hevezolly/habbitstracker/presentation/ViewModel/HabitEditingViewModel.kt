@@ -2,8 +2,8 @@ package hevezolly.habbitstracker.presentation.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import hevezolly.habbitstracker.domain.Model.EditedHabit
-import hevezolly.habbitstracker.domain.Model.Habit
+import hevezolly.habitstracker.domain.Model.EditedHabit
+import hevezolly.habitstracker.domain.Model.Habit
 
 class HabitEditingViewModel(
     private val mainViewModel: MainViewModel,
@@ -16,9 +16,10 @@ class HabitEditingViewModel(
         if (editedHabit == null)
             mainViewModel.addHabit(habit!!)
         else
-            mainViewModel.replaceHabit(EditedHabit(
-                editedHabit.index,
-                editedHabit.initialHabit, habit!!))
+            mainViewModel.replaceHabit(
+                EditedHabit(
+                editedHabit.initialHabit, habit!!)
+            )
     }
 
     private fun isHabitCorrect(habit: Habit?): Boolean{

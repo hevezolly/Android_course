@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">HabitsTracker</string>
+    <string name="complete_button">Complete</string>
     <string-array name="priorities">
         <item>High</item>
         <item>Middle</item>
@@ -12,4 +13,10 @@
     <string name="description_line">Made by Vsevolod Finogenov\nas part of Doubletapp android course</string>
     <string name="menu_home">Home</string>
     <string name="menu_add_habit">Add New Habit</string>
+
+    <string name="encourage_none">Deadline passed :(</string>
+    <string name="encourage_bad_less">Можете выполнить еще #</string>
+    <string name="encourage_good_more">You are breath taking!</string>
+    <string name="encourage_good_less">Стоит выполнить еще #</string>
+    <string name="encourage_bad_more">Хватит это делать</string>
 </resources>
